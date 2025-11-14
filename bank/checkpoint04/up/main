@@ -1,0 +1,38 @@
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	//"github.com/Grand-Theft-Auto-In-CCNU-MUXI/hacker-support/httptool"
+)
+
+func main() {
+	imageData, err := os.ReadFile("/Users/zhangziyue/Pictures/test.jpg")
+	if err != nil {
+		panic(err)
+	}
+	url := "http://http-theft-bank.gtainccnu.muxixyz.com/api/v1/bank/iris_recognition_gate"
+	r, err := http.NewRequest("PUT", url, bytes.NewReader(imageData))
+	if err != nil {
+		fmt.Println(err)
+	}
+	client := &http.Client{}
+	r.Header.Set("Content-Type", "image/jpeg")
+	r.Header.Set("code", "助我破鼎")
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("passport", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlIjoiMTHpmr7pgZPmmK_kvaDlrrPkuobmiJEiLCJpYXQiOjE3NjI5MTg4NjksIm5iZiI6MTc2MjkxODg2OX0.koIQNVwXpMRFESk_aK1PtYs9RKcBFUXyY7SApsgLPPM")
+	res, err := client.Do(r)
+	if err != nil {
+		fmt.Println("res失败:", err)
+	}
+	defer res.Body.Close()
+	resp, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println("read失败：", err)
+	}
+	fmt.Println("body", string(resp))
+
+}
